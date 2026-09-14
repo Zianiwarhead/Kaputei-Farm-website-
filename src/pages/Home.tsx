@@ -9,17 +9,6 @@ import { Reveal } from '../components/Reveal'
 import { SauceRibbon } from '../components/SauceRibbon'
 import { formatKes } from '../data/products'
 
-const TILE_GRADIENTS: Record<string, { from: string; to: string }> = {
-  Sauces: { from: '#C8252C', to: '#E07A1F' },
-  Dressings: { from: '#E8B93E', to: '#C8941F' },
-  Chutney: { from: '#C8941F', to: '#5C8A3A' },
-  Pickles: { from: '#5C8A3A', to: '#2E4D1F' },
-  Spreads: { from: '#D94B2B', to: '#9E1B22' },
-  Pantry: { from: '#E8B93E', to: '#B8721A' },
-  Teas: { from: '#5C8A3A', to: '#8A5A3A' },
-  Bulk: { from: '#1F1A17', to: '#7B3A18' },
-}
-
 const TRUST = [
   { icon: ShoppingBasket, title: '23 products', sub: 'One family pantry' },
   { icon: Truck, title: 'Nationwide', sub: 'Delivery across Kenya' },
@@ -193,30 +182,27 @@ export function Home() {
             <h2 className="mt-3 font-display text-4xl font-bold sm:text-5xl">Pick your flavor.</h2>
           </Reveal>
           <div className="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-4">
-            {categories.map((c, i) => {
-              const g = TILE_GRADIENTS[c.name] ?? { from: '#C8252C', to: '#E07A1F' }
-              return (
-                <Reveal key={c.name} delay={Math.min(i, 7) * 50}>
-                  <Link
-                    to={`/products?cat=${encodeURIComponent(c.name)}`}
-                    className="group flex items-center gap-3 rounded-2xl border border-charcoal/5 bg-white p-4 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-warm"
-                  >
-                    <span
-                      className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl font-display text-lg font-bold text-white"
-                      style={{ background: `linear-gradient(135deg, ${g.from}, ${g.to})` }}
-                    >
-                      {c.name.charAt(0)}
+            {categories.map((c, i) => (
+              <Reveal key={c.name} delay={Math.min(i, 7) * 50}>
+                <Link
+                  to={`/products?cat=${encodeURIComponent(c.name)}`}
+                  className="group flex items-center gap-3 rounded-2xl border border-charcoal/5 bg-white p-3 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-warm"
+                >
+                  <img
+                    src={`/categories/${c.name.toLowerCase()}.jpg`}
+                    alt={`${c.name} range`}
+                    loading="lazy"
+                    className="h-14 w-14 shrink-0 rounded-2xl object-cover"
+                  />
+                  <span>
+                    <span className="block font-semibold leading-tight">{c.name}</span>
+                    <span className="block text-xs text-charcoal/55">
+                      {c.count} {c.count === 1 ? 'product' : 'products'}
                     </span>
-                    <span>
-                      <span className="block font-semibold leading-tight">{c.name}</span>
-                      <span className="block text-xs text-charcoal/55">
-                        {c.count} {c.count === 1 ? 'product' : 'products'}
-                      </span>
-                    </span>
-                  </Link>
-                </Reveal>
-              )
-            })}
+                  </span>
+                </Link>
+              </Reveal>
+            ))}
           </div>
         </div>
       </section>
