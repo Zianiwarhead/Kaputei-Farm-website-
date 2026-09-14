@@ -189,10 +189,10 @@ export function Home() {
                   className="group flex items-center gap-3 rounded-2xl border border-charcoal/5 bg-white p-3 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-warm"
                 >
                   <img
-                    src={`/categories/${c.name.toLowerCase()}.jpg`}
+                    src={`/categories/${c.name.toLowerCase()}.png`}
                     alt={`${c.name} range`}
                     loading="lazy"
-                    className="h-14 w-14 shrink-0 rounded-2xl object-cover"
+                    className="h-14 w-14 shrink-0 rounded-2xl bg-cream-warm/70 object-contain p-1"
                   />
                   <span>
                     <span className="block font-semibold leading-tight">{c.name}</span>
