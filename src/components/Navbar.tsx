@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Link, NavLink } from 'react-router-dom'
 import { Menu, X } from 'lucide-react'
 import { cx } from '../lib/utils'
+import { BRAND } from '../data/products'
 
 const LINKS = [
   { to: '/', label: 'Home' },
@@ -47,13 +48,15 @@ export function Navbar() {
           onClick={() => setOpen((o) => !o)}
           className="md:hidden rounded-full p-2 text-charcoal hover:bg-cream-warm"
           aria-label="Toggle menu"
+          aria-expanded={open}
+          aria-controls="mobile-navigation"
         >
           {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
         </button>
       </div>
 
       {open && (
-        <nav className="border-t border-charcoal/5 bg-cream md:hidden">
+        <nav id="mobile-navigation" className="border-t border-charcoal/5 bg-cream md:hidden">
           <div className="container-site flex flex-col gap-1 py-3">
             {LINKS.map((l) => (
               <NavLink
@@ -71,6 +74,15 @@ export function Navbar() {
                 {l.label}
               </NavLink>
             ))}
+            <a
+              href={BRAND.whatsappLink}
+              target="_blank"
+              rel="noreferrer"
+              onClick={() => setOpen(false)}
+              className="btn-primary mt-2 w-full"
+            >
+              Order on WhatsApp
+            </a>
           </div>
         </nav>
       )}

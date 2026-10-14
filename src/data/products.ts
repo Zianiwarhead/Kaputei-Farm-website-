@@ -342,6 +342,9 @@ export const PRODUCTS: Product[] = [
 export const CATEGORIES = ['All', 'Sauces', 'Dressings', 'Chutney', 'Pickles', 'Spreads', 'Pantry', 'Teas', 'Bulk'] as const
 export type CategoryFilter = (typeof CATEGORIES)[number]
 
+/** Digits-only form of phoneWhatsApp, for wa.me links. Single source of truth. */
+const PHONE_DIGITS = '254710752751'
+
 export const BRAND = {
   name: 'Kaputei Farm Products Ltd',
   tagline: 'We Got Flavor',
@@ -349,8 +352,10 @@ export const BRAND = {
   logo: 'https://kaputeishop.com/cdn/shop/files/Kaputei-Logo-removebg-preview-200x200.webp',
   email: 'info@kaputei.com',
   phoneWhatsApp: '+254 710 752 751',
+  /** Digits-only form of phoneWhatsApp, for wa.me links: 254710752751. */
+  phoneDigits: PHONE_DIGITS,
   whatsappLink:
-    'https://wa.me/254710752751?text=' +
+    `https://wa.me/${PHONE_DIGITS}?text=` +
     encodeURIComponent('Hi Kaputei Farm Products! I would like to place an order.'),
   location: 'Ngong Rd, Nairobi',
   instagram: 'https://www.instagram.com/kaputeifarmproducts/',

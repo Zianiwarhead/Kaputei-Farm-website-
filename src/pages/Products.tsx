@@ -108,7 +108,7 @@ export function Products() {
             <p className="mt-2 text-sm text-charcoal/60">
               Try another word — or{' '}
               <a
-                href={`https://wa.me/254710752751?text=${encodeURIComponent('Hi! Do you make...?')}`}
+                href={`https://wa.me/${BRAND.phoneDigits}?text=${encodeURIComponent('Hi! Do you make...?')}`}
                 target="_blank"
                 rel="noreferrer"
                 className="font-semibold text-tomato underline"
@@ -138,7 +138,7 @@ export function Products() {
                 <p className="text-3xl font-semibold text-chipotle">{formatKes(222.58)}+</p>
                 <p className="mt-1 text-xs text-white/50">bulk packs, from</p>
                 <a
-                  href={`https://wa.me/254710752751?text=${encodeURIComponent('Hi! I run a business and I would like a wholesale quote for your sauces.')}`}
+                  href={`https://wa.me/${BRAND.phoneDigits}?text=${encodeURIComponent('Hi! I run a business and I would like a wholesale quote for your sauces.')}`}
                   target="_blank"
                   rel="noreferrer"
                   className="btn-primary mt-5"

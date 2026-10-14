@@ -11,7 +11,7 @@ interface Props {
 
 function orderLink(product: Product) {
   return (
-    'https://wa.me/254710752751?text=' +
+    `https://wa.me/${BRAND.phoneDigits}?text=` +
     encodeURIComponent(`Hi ${BRAND.name}! I would like to order: ${product.name} (${product.handle}).`)
   )
 }

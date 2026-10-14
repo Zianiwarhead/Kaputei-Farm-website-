@@ -1,0 +1,13 @@
+<!doctype html><meta charset="utf-8"><title>Image preview</title>
+<style>
+body{font-family:system-ui,sans-serif;background:#fff5ec;margin:24px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:20px}
+.tile{position:relative;aspect-ratio:1;border-radius:20px;overflow:hidden;
+  background:linear-gradient(135deg,#c8252c,#7b3a18)}
+.tile img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;transition:opacity .35s}
+.tile .b{opacity:0}
+.tile:hover .b{opacity:1}
+.tile:hover .f{opacity:0}
+.tile span{position:absolute;left:10px;bottom:8px;font-size:12px;color:#fff;
+  background:rgba(0,0,0,.45);padding:2px 8px;border-radius:10px}
+</style><div class="grid"><div class="tile"><img class="f" src="honey.webp"><span>honey (no back image)</span></div><div class="tile"><img class="f" src="teas.webp"><span>teas (no back image)</span></div><div class="tile"><img class="f" src="tomato-ketchup.webp"><img class="b" src="tomato-ketchup-back.webp"><span>tomato-ketchup (hover: front/back)</span></div></div>

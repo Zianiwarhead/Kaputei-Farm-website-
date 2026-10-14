@@ -6,6 +6,7 @@ import { Products } from './pages/Products'
 import { Recipes } from './pages/Recipes'
 import { About } from './pages/About'
 import { Contact } from './pages/Contact'
+import { NotFound } from './pages/NotFound'
 
 export default function App() {
   return (
@@ -18,6 +19,7 @@ export default function App() {
           <Route path="/recipes" element={<Recipes />} />
           <Route path="/about" element={<About />} />
           <Route path="/contact" element={<Contact />} />
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </main>
       <Footer />

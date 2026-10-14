@@ -4,7 +4,7 @@ import { BRAND, PRODUCTS } from '../data/products'
 
 export function Footer() {
   const shopLink = `${BRAND.sourceSite}`
-  const waLink = 'https://wa.me/254710752751'
+  const waLink = `https://wa.me/${BRAND.phoneDigits}`
 
   return (
     <footer className="border-t border-charcoal/5 bg-charcoal text-cream">

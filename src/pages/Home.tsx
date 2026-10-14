@@ -9,14 +9,13 @@ import { Reveal } from '../components/Reveal'
 import { SauceRibbon } from '../components/SauceRibbon'
 import { formatKes } from '../data/products'
 
-const TRUST = [
-  { icon: ShoppingBasket, title: '23 products', sub: 'One family pantry' },
-  { icon: Truck, title: 'Nationwide', sub: 'Delivery across Kenya' },
-  { icon: MessageCircle, title: 'WhatsApp orders', sub: 'One tap to order' },
-]
-
 export function Home() {
   const { products } = useProducts()
+  const TRUST = [
+    { icon: ShoppingBasket, title: `${products.length} products`, sub: 'One family pantry' },
+    { icon: Truck, title: 'Nationwide', sub: 'Delivery across Kenya' },
+    { icon: MessageCircle, title: 'WhatsApp orders', sub: 'One tap to order' },
+  ]
   const pick = (id: string, fallbackIndex: number) =>
     products.find((p) => p.id === id) ?? products[fallbackIndex % products.length]
   const heroMain = pick('barbecue-sauce', 0)

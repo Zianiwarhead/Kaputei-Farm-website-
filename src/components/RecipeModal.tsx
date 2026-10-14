@@ -12,7 +12,7 @@ interface Props {
 
 export function RecipeModal({ recipe, open, onOpenChange }: Props) {
   const orderLink =
-    'https://wa.me/254710752751?text=' +
+    `https://wa.me/${BRAND.phoneDigits}?text=` +
     encodeURIComponent(`Hi ${BRAND.name}! I would like to order ${recipe.sauce} to cook ${recipe.title}.`)
 
   return (
