@@ -2,7 +2,9 @@ import * as Dialog from '@radix-ui/react-dialog'
 import { useState } from 'react'
 import { ExternalLink, MessageCircle, X } from 'lucide-react'
 import type { Product } from '../data/products'
-import { BRAND, formatKes } from '../data/products'
+import { formatKes } from '../data/products'
+import { makeWhatsAppLink } from '../data/siteSettings'
+import { useSiteSettings } from '../hooks/useSiteSettings'
 import { cx } from '../lib/utils'
 
 interface Props {
@@ -11,14 +13,12 @@ interface Props {
   onOpenChange: (open: boolean) => void
 }
 
-function orderLink(product: Product) {
-  return (
-    `https://wa.me/${BRAND.phoneDigits}?text=` +
-    encodeURIComponent(`Hi ${BRAND.name}! I would like to order: ${product.name} (${product.handle}).`)
-  )
+function orderLink(product: Product, settings: ReturnType<typeof useSiteSettings>) {
+  return makeWhatsAppLink(settings, `Hi ${settings.name}! I would like to order: ${product.name} (${product.handle}).`)
 }
 
 export function ProductQuickView({ product, open, onOpenChange }: Props) {
+  const settings = useSiteSettings()
   const [active, setActive] = useState(0)
   const current = product.images[Math.min(active, product.images.length - 1)] ?? product.images[0]
 
@@ -106,7 +106,7 @@ export function ProductQuickView({ product, open, onOpenChange }: Props) {
 
               <div className="mt-5 grid gap-2.5">
                 <a
-                  href={orderLink(product)}
+                  href={orderLink(product, settings)}
                   target="_blank"
                   rel="noreferrer"
                   className="btn w-full bg-leaf text-white hover:bg-[#4A7230]"
@@ -115,7 +115,7 @@ export function ProductQuickView({ product, open, onOpenChange }: Props) {
                   Order on WhatsApp
                 </a>
                 <a
-                  href={`${BRAND.sourceSite}products/${product.handle}`}
+                  href={`${settings.sourceSite}products/${product.handle}`}
                   target="_blank"
                   rel="noreferrer"
                   className="btn-ghost w-full"

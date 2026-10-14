@@ -1,7 +1,8 @@
 import { useState, type FormEvent } from 'react'
 import { CheckCircle2, ChevronDown, Facebook, Instagram, Mail, MapPin, MessageCircle, Music2, Phone, Send, Youtube } from 'lucide-react'
 import { Reveal } from '../components/Reveal'
-import { BRAND } from '../data/products'
+import { makeWhatsAppLink } from '../data/siteSettings'
+import { useSiteSettings } from '../hooks/useSiteSettings'
 import { cx } from '../lib/utils'
 
 const INTENTS = ['Just saying hello', 'Retail order', 'Wholesale / stockist', 'Restaurant / catering'] as const
@@ -57,6 +58,7 @@ function FaqItem({ q, a }: { q: string; a: string }) {
 }
 
 export function Contact() {
+  const settings = useSiteSettings()
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [intent, setIntent] = useState<(typeof INTENTS)[number]>(INTENTS[0])
@@ -68,7 +70,9 @@ export function Contact() {
     setSent(true)
   }
 
-  const mailto = `mailto:${BRAND.email}?subject=${encodeURIComponent(
+  const faqs = (settings.faqs.length ? settings.faqs : FAQS).map((item) => ({ ...item, a: item.a.replace('+254 710 752 751', settings.phoneWhatsApp).replace('Ngong Rd, Nairobi', settings.location).replace('kaputeishop.com', settings.sourceSite.replace(/^https?:\/\//, '').replace(/\/$/, '')) }))
+
+  const mailto = `mailto:${settings.email}?subject=${encodeURIComponent(
     `Kaputei enquiry — ${intent} — ${name}`,
   )}&body=${encodeURIComponent(`${message}\n\n— ${name} (${email})`)}`
 
@@ -87,7 +91,7 @@ export function Contact() {
                 <MapPin className="h-4 w-4 text-tomato" />
               </span>
               <span>
-                <strong className="block font-semibold">{BRAND.location}</strong>
+                <strong className="block font-semibold">{settings.location}</strong>
                 <span className="text-charcoal/60">Nairobi, Kenya</span>
               </span>
             </li>
@@ -96,7 +100,7 @@ export function Contact() {
                 <Phone className="h-4 w-4 text-tomato" />
               </span>
               <span>
-                <strong className="block font-semibold">{BRAND.phoneWhatsApp}</strong>
+                <strong className="block font-semibold">{settings.phoneWhatsApp}</strong>
                 <span className="text-charcoal/60">Call or WhatsApp</span>
               </span>
             </li>
@@ -105,7 +109,7 @@ export function Contact() {
                 <Mail className="h-4 w-4 text-tomato" />
               </span>
               <span>
-                <strong className="block font-semibold">{BRAND.email}</strong>
+                <strong className="block font-semibold">{settings.email}</strong>
                 <span className="text-charcoal/60">We reply within a day or two</span>
               </span>
             </li>
@@ -114,22 +118,22 @@ export function Contact() {
           <div className="mt-8">
             <h2 className="text-xs font-semibold uppercase tracking-widest text-charcoal/55">Follow the farm</h2>
             <div className="mt-3 flex flex-wrap gap-2.5">
-              <a href={BRAND.instagram} target="_blank" rel="noreferrer" aria-label="Instagram" className="rounded-full bg-white p-2.5 shadow-sm transition-colors hover:bg-tomato hover:text-white">
+              <a href={settings.instagram} target="_blank" rel="noreferrer" aria-label="Instagram" className="rounded-full bg-white p-2.5 shadow-sm transition-colors hover:bg-tomato hover:text-white">
                 <Instagram className="h-4 w-4" />
               </a>
-              <a href={BRAND.facebook} target="_blank" rel="noreferrer" aria-label="Facebook" className="rounded-full bg-white p-2.5 shadow-sm transition-colors hover:bg-tomato hover:text-white">
+              <a href={settings.facebook} target="_blank" rel="noreferrer" aria-label="Facebook" className="rounded-full bg-white p-2.5 shadow-sm transition-colors hover:bg-tomato hover:text-white">
                 <Facebook className="h-4 w-4" />
               </a>
-              <a href={BRAND.tiktok} target="_blank" rel="noreferrer" aria-label="TikTok" className="rounded-full bg-white p-2.5 shadow-sm transition-colors hover:bg-tomato hover:text-white">
+              <a href={settings.tiktok} target="_blank" rel="noreferrer" aria-label="TikTok" className="rounded-full bg-white p-2.5 shadow-sm transition-colors hover:bg-tomato hover:text-white">
                 <Music2 className="h-4 w-4" />
               </a>
-              <a href={BRAND.twitterX} target="_blank" rel="noreferrer" aria-label="X (Twitter)" className="rounded-full bg-white p-2.5 shadow-sm transition-colors hover:bg-tomato hover:text-white">
+              <a href={settings.twitterX} target="_blank" rel="noreferrer" aria-label="X (Twitter)" className="rounded-full bg-white p-2.5 shadow-sm transition-colors hover:bg-tomato hover:text-white">
                 <svg viewBox="0 0 24 24" className="h-4 w-4 fill-current"><path d="M18.9 1.2h3.7l-8.1 9.3L24 22.8h-7.5l-5.9-7.7-6.7 7.7H.2l8.7-9.9L0 1.2h7.7l5.3 7 5.9-7zm-1.3 19.4h2L6.6 3.3H4.4l13.2 17.3z"/></svg>
               </a>
-              <a href={BRAND.youtube} target="_blank" rel="noreferrer" aria-label="YouTube" className="rounded-full bg-white p-2.5 shadow-sm transition-colors hover:bg-tomato hover:text-white">
+              <a href={settings.youtube} target="_blank" rel="noreferrer" aria-label="YouTube" className="rounded-full bg-white p-2.5 shadow-sm transition-colors hover:bg-tomato hover:text-white">
                 <Youtube className="h-4 w-4" />
               </a>
-              <a href={BRAND.whatsappChannel} target="_blank" rel="noreferrer" aria-label="WhatsApp Channel" className="rounded-full bg-white p-2.5 shadow-sm transition-colors hover:bg-leaf hover:text-white">
+              <a href={settings.whatsappChannel} target="_blank" rel="noreferrer" aria-label="WhatsApp Channel" className="rounded-full bg-white p-2.5 shadow-sm transition-colors hover:bg-leaf hover:text-white">
                 <MessageCircle className="h-4 w-4" />
               </a>
             </div>
@@ -152,7 +156,7 @@ export function Contact() {
                     Send via email
                   </a>
                   <a
-                    href={BRAND.whatsappLink}
+                    href={makeWhatsAppLink(settings, `Hi ${settings.name}! I would like to place an order.`)}
                     target="_blank"
                     rel="noreferrer"
                     className="btn bg-leaf text-white hover:bg-[#4A7230]"
@@ -234,7 +238,7 @@ export function Contact() {
           <p className="eyebrow">Good to know</p>
           <h2 className="mt-3 text-2xl font-semibold sm:text-3xl">Questions, answered.</h2>
           <div className="mt-6 divide-y divide-charcoal/10 rounded-3xl border border-charcoal/10 bg-white px-6 shadow-sm sm:px-8">
-            {FAQS.map((f) => (
+            {faqs.map((f) => (
               <FaqItem key={f.q} q={f.q} a={f.a} />
             ))}
           </div>

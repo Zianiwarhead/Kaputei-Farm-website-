@@ -2,7 +2,8 @@ import { useState } from 'react'
 import { Link, NavLink } from 'react-router-dom'
 import { Menu, X } from 'lucide-react'
 import { cx } from '../lib/utils'
-import { BRAND } from '../data/products'
+import { makeWhatsAppLink } from '../data/siteSettings'
+import { useSiteSettings } from '../hooks/useSiteSettings'
 
 const LINKS = [
   { to: '/', label: 'Home' },
@@ -14,12 +15,13 @@ const LINKS = [
 
 export function Navbar() {
   const [open, setOpen] = useState(false)
+  const settings = useSiteSettings()
 
   return (
     <header className="sticky top-0 z-40 border-b border-charcoal/5 bg-cream/85 backdrop-blur-md">
       <div className="container-site flex h-16 items-center justify-between">
         <Link to="/" className="flex items-center gap-2" aria-label="Kaputei Farm Products — home">
-          <img src="/logo.png" alt="Kaputei Farm Products" className="h-11 w-auto" />
+          <img src={settings.logoUrl} alt={settings.name} className="h-11 w-auto" />
         </Link>
 
         <nav className="hidden items-center gap-1 md:flex">
@@ -75,7 +77,7 @@ export function Navbar() {
               </NavLink>
             ))}
             <a
-              href={BRAND.whatsappLink}
+              href={makeWhatsAppLink(settings, `Hi ${settings.name}! I would like to place an order.`)}
               target="_blank"
               rel="noreferrer"
               onClick={() => setOpen(false)}

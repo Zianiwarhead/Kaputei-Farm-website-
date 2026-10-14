@@ -1,18 +1,19 @@
 import { useEffect, useMemo, useState } from 'react'
-import { RECIPES } from '../data/recipes'
+import { useRecipes } from '../hooks/useRecipes'
 import { RecipeCard } from '../components/RecipeCard'
 import { Reveal } from '../components/Reveal'
 import { cx } from '../lib/utils'
 
 const CATEGORIES = ['All', 'Beef', 'Chicken', 'Pork', 'Sides', 'Sauces'] as const
-type CategoryFilter = (typeof CATEGORIES)[number]
 
 export function Recipes() {
-  const [filter, setFilter] = useState<CategoryFilter>('All')
+  const { recipes } = useRecipes()
+  const [filter, setFilter] = useState<string>('All')
+  const categories = [...new Set([...CATEGORIES, ...recipes.map((recipe) => recipe.category)])]
 
   const filtered = useMemo(
-    () => (filter === 'All' ? RECIPES : RECIPES.filter((r) => r.category === filter)),
-    [filter],
+    () => (filter === 'All' ? recipes : recipes.filter((r) => r.category === filter)),
+    [filter, recipes],
   )
 
   useEffect(() => {
@@ -34,7 +35,7 @@ export function Recipes() {
         </Reveal>
 
         <div className="mt-8 flex flex-wrap gap-2">
-          {CATEGORIES.map((c) => (
+          {categories.map((c) => (
             <button
               key={c}
               type="button"

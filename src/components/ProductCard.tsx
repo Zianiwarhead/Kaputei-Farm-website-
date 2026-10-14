@@ -1,7 +1,9 @@
 import { useRef, useState, type MouseEvent } from 'react'
 import { Eye, MessageCircle } from 'lucide-react'
 import type { Product } from '../data/products'
-import { BRAND, formatKes } from '../data/products'
+import { formatKes } from '../data/products'
+import { makeWhatsAppLink } from '../data/siteSettings'
+import { useSiteSettings } from '../hooks/useSiteSettings'
 import { ProductQuickView } from './ProductQuickView'
 import { cx } from '../lib/utils'
 
@@ -9,11 +11,8 @@ interface Props {
   product: Product
 }
 
-function orderLink(product: Product) {
-  return (
-    `https://wa.me/${BRAND.phoneDigits}?text=` +
-    encodeURIComponent(`Hi ${BRAND.name}! I would like to order: ${product.name} (${product.handle}).`)
-  )
+function orderLink(product: Product, settings: ReturnType<typeof useSiteSettings>) {
+  return makeWhatsAppLink(settings, `Hi ${settings.name}! I would like to order: ${product.name} (${product.handle}).`)
 }
 
 /** Resolves display pricing. Today this falls back to the flat priceKes;
@@ -53,6 +52,7 @@ export function ProductCard({ product }: Props) {
     el.style.transform = 'perspective(800px) rotateY(0deg) rotateX(0deg)'
   }
 
+  const settings = useSiteSettings()
   const price = displayPrice(product)
 
   return (
@@ -127,7 +127,7 @@ export function ProductCard({ product }: Props) {
             )}
           </div>
           <a
-            href={orderLink(product)}
+            href={orderLink(product, settings)}
             target="_blank"
             rel="noreferrer"
             className={cx(

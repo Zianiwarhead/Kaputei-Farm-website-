@@ -17,6 +17,7 @@ interface DbRow {
   variant_prices?: VariantPrice[] | null
   gradient_from?: string | null
   gradient_to?: string | null
+  is_active?: boolean | null
 }
 
 function toNumber(n: number | string | null | undefined, fallback: number): number {
@@ -68,12 +69,11 @@ export function useProducts() {
         const { data, error } = await supabase!
           .from('products')
           .select('*')
-          .eq('is_active', true)
           .order('sort_order', { ascending: true })
         if (cancelled) return
         if (!error && data && data.length > 0) {
           try {
-            setProducts((data as DbRow[]).map(mapRow))
+            setProducts((data as DbRow[]).filter((row) => row.is_active !== false).map(mapRow))
             setSource('supabase')
           } catch {
             /* keep local fallback */

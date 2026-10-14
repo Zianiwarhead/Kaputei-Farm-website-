@@ -1,7 +1,8 @@
 import * as Dialog from '@radix-ui/react-dialog'
 import { Clock, MessageCircle, Users, X } from 'lucide-react'
 import type { Recipe } from '../data/recipes'
-import { BRAND } from '../data/products'
+import { makeWhatsAppLink } from '../data/siteSettings'
+import { useSiteSettings } from '../hooks/useSiteSettings'
 import { RecipeImage } from './RecipeImage'
 
 interface Props {
@@ -11,9 +12,8 @@ interface Props {
 }
 
 export function RecipeModal({ recipe, open, onOpenChange }: Props) {
-  const orderLink =
-    `https://wa.me/${BRAND.phoneDigits}?text=` +
-    encodeURIComponent(`Hi ${BRAND.name}! I would like to order ${recipe.sauce} to cook ${recipe.title}.`)
+  const settings = useSiteSettings()
+  const orderLink = makeWhatsAppLink(settings, `Hi ${settings.name}! I would like to order ${recipe.sauce} to cook ${recipe.title}.`)
 
   return (
     <Dialog.Root open={open} onOpenChange={onOpenChange}>

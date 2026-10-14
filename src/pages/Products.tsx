@@ -1,8 +1,9 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { Search } from 'lucide-react'
-import { CATEGORIES, formatKes, type CategoryFilter } from '../data/products'
-import { BRAND } from '../data/products'
+import { CATEGORIES, formatKes } from '../data/products'
+import { makeWhatsAppLink } from '../data/siteSettings'
+import { useSiteSettings } from '../hooks/useSiteSettings'
 import { useProducts } from '../hooks/useProducts'
 import { ProductCard } from '../components/ProductCard'
 import { Reveal } from '../components/Reveal'
@@ -10,16 +11,13 @@ import { cx } from '../lib/utils'
 
 export function Products() {
   const { products, loading, source } = useProducts()
+  const settings = useSiteSettings()
   const [searchParams, setSearchParams] = useSearchParams()
   const initialCat = searchParams.get('cat')
-  const [filter, setFilter] = useState<CategoryFilter>(
-    initialCat && (CATEGORIES as readonly string[]).includes(initialCat)
-      ? (initialCat as CategoryFilter)
-      : 'All',
-  )
+  const [filter, setFilter] = useState<string>(initialCat ?? 'All')
   const [query, setQuery] = useState('')
 
-  function pickFilter(c: CategoryFilter) {
+  function pickFilter(c: string) {
     setFilter(c)
     setSearchParams(c === 'All' ? {} : { cat: c }, { replace: true })
   }
@@ -46,7 +44,7 @@ export function Products() {
         <Reveal>
           <p className="eyebrow">Our range</p>
           <h1 className="mt-3 max-w-2xl text-4xl font-semibold sm:text-6xl">
-            We got flavor.
+            {settings.tagline}.
           </h1>
           <p className="mt-4 max-w-xl text-base leading-relaxed text-charcoal/65">
             {products.length} product lines — from everyday tomato sauce and ketchup to chutneys,
@@ -62,7 +60,7 @@ export function Products() {
 
         <div className="mt-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div className="flex flex-wrap gap-2">
-            {CATEGORIES.map((c) => (
+            {['All', ...new Set([...CATEGORIES.filter((c) => c !== 'All'), ...products.map((p) => p.category)])].map((c) => (
               <button
                 key={c}
                 type="button"
@@ -108,7 +106,7 @@ export function Products() {
             <p className="mt-2 text-sm text-charcoal/60">
               Try another word — or{' '}
               <a
-                href={`https://wa.me/${BRAND.phoneDigits}?text=${encodeURIComponent('Hi! Do you make...?')}`}
+                href={makeWhatsAppLink(settings, 'Hi! Do you make...?')}
                 target="_blank"
                 rel="noreferrer"
                 className="font-semibold text-tomato underline"
@@ -138,7 +136,7 @@ export function Products() {
                 <p className="text-3xl font-semibold text-chipotle">{formatKes(222.58)}+</p>
                 <p className="mt-1 text-xs text-white/50">bulk packs, from</p>
                 <a
-                  href={`https://wa.me/${BRAND.phoneDigits}?text=${encodeURIComponent('Hi! I run a business and I would like a wholesale quote for your sauces.')}`}
+                  href={makeWhatsAppLink(settings, 'Hi! I run a business and I would like a wholesale quote for your sauces.')}
                   target="_blank"
                   rel="noreferrer"
                   className="btn-primary mt-5"
@@ -146,7 +144,7 @@ export function Products() {
                   Get a wholesale quote
                 </a>
                 <p className="mt-3 text-xs text-white/45">
-                  Or call {BRAND.phoneWhatsApp} · {BRAND.location}
+                  Or call {settings.phoneWhatsApp} · {settings.location}
                 </p>
               </div>
             </div>

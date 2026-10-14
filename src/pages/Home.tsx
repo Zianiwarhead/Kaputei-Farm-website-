@@ -1,7 +1,9 @@
 import { Link } from 'react-router-dom'
 import { ArrowRight, Leaf, MessageCircle, ShoppingBasket, Truck } from 'lucide-react'
-import { BRAND, CATEGORIES } from '../data/products'
-import { RECIPES } from '../data/recipes'
+import { CATEGORIES } from '../data/products'
+import { makeWhatsAppLink } from '../data/siteSettings'
+import { useSiteSettings } from '../hooks/useSiteSettings'
+import { useRecipes } from '../hooks/useRecipes'
 import { useProducts } from '../hooks/useProducts'
 import { ProductCard } from '../components/ProductCard'
 import { RecipeCard } from '../components/RecipeCard'
@@ -11,6 +13,8 @@ import { formatKes } from '../data/products'
 
 export function Home() {
   const { products } = useProducts()
+  const { recipes } = useRecipes()
+  const settings = useSiteSettings()
   const TRUST = [
     { icon: ShoppingBasket, title: `${products.length} products`, sub: 'One family pantry' },
     { icon: Truck, title: 'Nationwide', sub: 'Delivery across Kenya' },
@@ -25,10 +29,11 @@ export function Home() {
   const rail = railIds
     .map((id, i) => products.find((p) => p.id === id) ?? products[i % products.length])
     .filter((p, i, arr) => arr.findIndex((x) => x.id === p.id) === i)
-  const recipeTeaser = RECIPES.slice(0, 3)
-  const categories = CATEGORIES.filter((c) => c !== 'All').map((c) => ({
+  const recipeTeaser = recipes.slice(0, 3)
+  const categories = [...new Set([...CATEGORIES.filter((c) => c !== 'All'), ...products.map((p) => p.category)])].map((c) => ({
     name: c,
     count: products.filter((p) => p.category === c).length,
+    image: products.find((p) => p.category === c)?.images[0] ?? `/categories/${c.toLowerCase()}.png`,
   }))
 
   return (
@@ -49,20 +54,19 @@ export function Home() {
             <div className="animate-fade-up">
               <p className="inline-flex items-center gap-2 rounded-full bg-charcoal px-4 py-1.5 text-[11px] font-bold uppercase tracking-[0.18em] text-cream">
                 <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-leaf" />
-                Kaputei Farm Products · Nairobi
+                {settings.name} · {settings.location}
               </p>
               <h1 className="mt-5 font-display text-6xl font-extrabold leading-[0.95] tracking-tight sm:text-8xl">
-                WE GOT
+                {settings.homeHeadline.split(' ').slice(0, -1).join(' ')}
                 <br />
-                <span className="text-tomato">FLAVOR.</span>
+                <span className="text-tomato">{settings.homeHeadline.split(' ').slice(-1)[0]}</span>
               </h1>
               <p className="mt-5 max-w-md text-base leading-relaxed text-charcoal/70 sm:text-lg">
-                Sauces, jams, honey &amp; teas made by a mother-daughter team —
-                order on WhatsApp in one tap.
+                {settings.homeDescription}
               </p>
               <div className="mt-7 flex flex-wrap items-center gap-3">
                 <a
-                  href={BRAND.whatsappLink}
+                  href={makeWhatsAppLink(settings, `Hi ${settings.name}! I would like to place an order.`)}
                   target="_blank"
                   rel="noreferrer"
                   className="btn group bg-charcoal px-7 py-3.5 text-white shadow-lg transition-all hover:bg-tomato"
@@ -188,7 +192,7 @@ export function Home() {
                   className="group flex items-center gap-3 rounded-2xl border border-charcoal/5 bg-white p-3 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-warm"
                 >
                   <img
-                    src={`/categories/${c.name.toLowerCase()}.png`}
+                    src={c.image}
                     alt={`${c.name} range`}
                     loading="lazy"
                     className="h-14 w-14 shrink-0 rounded-2xl bg-cream-warm/70 object-contain p-1"
@@ -272,13 +276,13 @@ export function Home() {
             </p>
             <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
               <a
-                href={BRAND.whatsappLink}
+                href={makeWhatsAppLink(settings, `Hi ${settings.name}! I would like to place an order.`)}
                 target="_blank"
                 rel="noreferrer"
                 className="btn bg-leaf px-7 py-3 text-white hover:bg-[#4A7230]"
               >
                 <MessageCircle className="h-4 w-4" />
-                WhatsApp {BRAND.phoneWhatsApp}
+                WhatsApp {settings.phoneWhatsApp}
               </a>
               <Link to="/products" className="btn border border-white/25 text-white hover:border-white hover:bg-white/10">
                 Browse products

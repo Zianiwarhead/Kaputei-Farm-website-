@@ -2,7 +2,7 @@ export interface Recipe {
   id: string
   title: string
   excerpt: string
-  category: 'Beef' | 'Chicken' | 'Pork' | 'Sauces' | 'Sides'
+  category: string
   time: string
   serves: string
   sauce: string
